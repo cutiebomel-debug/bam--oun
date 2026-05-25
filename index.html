@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เว็บนี้เพื่อแก!! 😜</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+        }
+        body {
+            background-color: #ffeef2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+        h1 {
+            color: #ff477e;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            text-align: center;
+            z-index: 10;
+            text-shadow: 2px 2px #fff;
+        }
+        .btn-container {
+            display: flex;
+            gap: 20px;
+            z-index: 10;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.1s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        #yesBtn {
+            background-color: #4cc9f0;
+            color: white;
+        }
+        #yesBtn:active {
+            transform: scale(0.95);
+        }
+        #noBtn {
+            background-color: #f72585;
+            color: white;
+            position: absolute; /* จำเป็นสำหรับการวิ่งหนี */
+        }
+        /* Style สำหรับคำที่พุ่งออกมา */
+        .fat-text {
+            position: absolute;
+            color: #ff0055;
+            font-weight: 900;
+            pointer-events: none; /* เพื่อไม่ให้บังเมาส์เวลาจะกดปุ่ม */
+            z-index: 5;
+            animation: popIn 0.8s ease-out forwards;
+            white-space: nowrap;
+            text-shadow: 2px 2px 0px #fff, -2px -2px 0px #fff, 2px -2px 0px #fff, -2px 2px 0px #fff;
+        }
+        @keyframes popIn {
+            0% {
+                transform: translate(-50%, -50%) scale(0) rotate(0deg);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1) rotate(var(--rand-rot));
+                opacity: 0; /* พุ่งมาแล้วค่อยๆ จางหายไป */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>วันนี้กินหมูกระทะไปกี่กิโลตอบมา?! 🐷</h1>
+
+    <div class="btn-container">
+        <button id="yesBtn" onclick="spawnFatText()">กดเพื่อยอมรับ</button>
+        <button id="noBtn" onmouseover="escapeButton()" onclick="escapeButton()">ไม่ได้กิน!</button>
+    </div>
+
+    <script>
+        // ฟังก์ชันกดแล้วคำว่า อีอ้วน พุ่งรัวๆ
+        function spawnFatText() {
+            // วนลูปให้พุ่งออกมาทีละ 15 คำพร้อมกันกระจายทั่วจอ
+            for (let i = 0; i < 15; i++) {
+                const text = document.createElement('div');
+                text.className = 'fat-text';
+                text.innerText = 'อีอ้วน!!!!🐷';
+
+                // สุ่มตำแหน่งทั่วหน้าจอ
+                const x = Math.random() * window.innerWidth;
+                const y = Math.random() * window.innerHeight;
+                
+                // สุ่มขนาดอักษร (ให้มีเล็กมีใหญ่พุ่งกระแทกตา)
+                const size = Math.random() * (60 - 20) + 20; // 20px - 60px
+                
+                // สุ่มองศาความเอียง
+                const rotation = Math.random() * (45 - (-45)) + (-45); 
+
+                text.style.left = `${x}px`;
+                text.style.top = `${y}px`;
+                text.style.fontSize = `${size}px`;
+                text.style.setProperty('--rand-rot', `${rotation}deg`);
+
+                document.body.appendChild(text);
+
+                // ลบ Element ทิ้งเมื่อแอนิเมชันจบ (เคลียร์แรม)
+                setTimeout(() => {
+                    text.remove();
+                }, 800);
+            }
+        }
+
+        // ฟังก์ชันปุ่มวิ่งหนี (สำหรับปุ่ม "ไม่ได้กิน!")
+        function escapeButton() {
+            const noBtn = document.getElementById('noBtn');
+            
+            // สุ่มพิกัดใหม่ให้อยู่ในขอบเขตหน้าจอ
+            const maxX = window.innerWidth - noBtn.offsetWidth - 20;
+            const maxY = window.innerHeight - noBtn.offsetHeight - 20;
+            
+            const newX = Math.max(20, Math.random() * maxX);
+            const newY = Math.max(20, Math.random() * maxY);
+
+            noBtn.style.left = `${newX}px`;
+            noBtn.style.top = `${newY}px`;
+        }
+
+        // เซ็ตตำแหน่งเริ่มต้นของปุ่มหนีให้มาอยู่ข้างๆ ปุ่มแรกก่อน
+        window.onload = () => {
+            const noBtn = document.getElementById('noBtn');
+            noBtn.style.left = 'calc(50% + 40px)';
+            noBtn.style.top = 'calc(50% + 40px)';
+        };
+    </script>
+</body>
+</html>
